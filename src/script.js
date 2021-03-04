@@ -1,17 +1,18 @@
-let PAGE_SIZE = 4000;
-let TOTAL_PAGES = null;
-
 const table = new Table()
 /**
  * @type {Page[]}
  */
+
+table.metadata.pageSize = Number.parseInt(document.querySelector('#page-size').value) || null;
+table.metadata.totalPages = Number.parseInt(document.querySelector('#total-pages').value) || null;
+table.metadata.bucketSize = Number.parseInt(document.querySelector('#bucket-size').value) || null;
+table.metadata.totalBuckets = Number.parseInt(document.querySelector('#total-buckets').value) || null;
+
 const pages = []
 /**
  * @type {Bucket[]}
  */
 const buckets = []
-
-console.log(hash("asdnqwesdjolkm"));
 
 /**
  * Reads file from an HTML input to start the   
@@ -20,22 +21,22 @@ console.log(hash("asdnqwesdjolkm"));
 function readFile(fileInput) {
   const file = fileInput.files[0];
   const fileName = file.name;
-  const fileExtension = fileName.match(/\..*/)[0]
+  const fileExtension = fileName.match(/\..*/)[0];
 
   if (!fileName.endsWith('.txt')) {
     alert('Invalid file extension: ' + fileExtension + '\nPlease use .txt');
     return;
   }
 
-  if ((notNull(PAGE_SIZE) && notNull(TOTAL_PAGES)) || (!notNull(PAGE_SIZE) && !notNull(TOTAL_PAGES))) {
-    alert('Please select either a page size OR total number of pages.')
+  if ((table.metadata.pageSize !== null && table.metadata.totalPages !== null) || (table.metadata.pageSize === null && table.metadata.totalPages === null)) {
+    alert('Please select either a page size OR total number of pages.');
     return;
   }
 
   /**
    * @type {Tuple[]}
    */
-  let tuples = [];
+  // let tuples = [];
 
   file.text().then(text => {
     text.split('\n').forEach(word => {
@@ -43,14 +44,34 @@ function readFile(fileInput) {
       const hash = hashingFunction(word);
       const cur_tuple = new Tuple(hash, word);
       
-      tuples.push(cur_tuple);
+      // tuples.push(cur_tuple);
       table.addTuple(cur_tuple);
     })
+  }).then(_ => {
+    if ((table.metadata.bucketSize !== null && table.metadata.totalBuckets !== null) || (table.metadata.bucketSize === null && table.metadata.totalBuckets === null)) {
+      alert('Please select either a bucket size OR total number of buckets.');
+      return;
+    }
+  
+    if (table.metadata.pageSize !== null) {
+      table.metadata.totalPages = Math.ceil(table.tuples.length / table.metadata.pageSize);
+    }
+    else if (table.metadata.totalPages !== null) {
+      table.metadata.pageSize = Math.ceil(table.tuples.length / table.metadata.totalPages);
+    }
+  
+    if (table.metadata.bucketSize !== null) {
+      table.metadata.totalBuckets = Math.ceil(table.tuples.length / table.metadata.bucketSize);
+    }
+    else if (table.metadata.totalBuckets !== null) {
+      table.metadata.bucketSize = Math.ceil(table.tuples.length / table.metadata.totalBuckets);
+    }
+  
+    debugLogState();
+  
+    initializePages(table.metadata.totalPages);
+    initializeBuckets(255);
   });
-
-  let totalPages = Math.ceil(table.tuples.length / PAGE_SIZE);
-  initializePages(totalPages);
-  initializeBuckets(255);
 }
 
 /**
@@ -59,7 +80,7 @@ function readFile(fileInput) {
  */
 function initializePages(numberOfPages) {
   for (let i = 0; i < numberOfPages; ++i)
-    pages.push(new Page(PAGE_SIZE));
+    pages.push(new Page(table.metadata.pageSize));
 }
 
 /**
@@ -77,15 +98,12 @@ function initializeBuckets(numberOfBuckets) {
  * @return {Number} hash generated from key
  */
 function hashingFunction(key) {
-  const temp_total_buckets = 255;
   let sum = 0;
   key.split('').reduce((total, char) => total += char.charCodeAt(0), sum);
 
-  return sum % temp_total_buckets;
+  return sum % table.metadata.totalBuckets;
 }
 
-/**
- * Returns true if data is defined and not null
- * @param {*} data 
- */
-function notNull(data) { return data && data != null }
+function debugLogState() {
+  console.log("total tuples: " + table.tuples.length, "\npage size: " + table.metadata.pageSize, "\ntotal pages: " + table.metadata.totalPages, "\nbucket size: " + table.metadata.bucketSize, "\ntotal buckets: " + table.metadata.totalBuckets);
+}
