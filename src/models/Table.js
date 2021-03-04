@@ -1,6 +1,8 @@
-
 class Table {
   constructor() {
+    /**
+     * @type {Tuple[]}
+     */
     this.tuples = [];
     this.metadata = {
       pageSize: undefined,
@@ -13,8 +15,7 @@ class Table {
   }
 
   /**
-   * 
-   * @param {Number} tuple
+   * @param {Tuple} tuple
    */
   addTuple(tuple) {
     this.tuples.push(tuple);

@@ -1,16 +1,17 @@
 class Page {
 
   /**
-   * 
    * @param {number} maxSize 
    */
   constructor(maxSize) {
     this.maxSize = maxSize;
+    /**
+     * @type {Tuple[]}
+     */
     this.tuples = [];
   }
 
   /**
-   * 
    * @param {Tuple} tuple 
    */
   addTuple(tuple) {
