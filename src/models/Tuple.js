@@ -1,7 +1,7 @@
 class Tuple {
   /**
    * 
-   * @param {Number} key 
+   * @param {string} key 
    * @param {*} data 
    */
   constructor(key, data) {
