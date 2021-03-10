@@ -1,9 +1,10 @@
 class Page {
-
   /**
+   * @param {number} id
    * @param {number} maxSize 
    */
-  constructor(maxSize) {
+  constructor(id, maxSize) {
+    this.id = id;
     this.maxSize = maxSize;
     /**
      * @type {Tuple[]}
@@ -20,7 +21,6 @@ class Page {
     else {
       this.tuples.push(tuple);
     }
-    
   }
 
 }

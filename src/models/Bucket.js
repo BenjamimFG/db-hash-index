@@ -6,7 +6,7 @@ class Bucket {
   constructor(id, maxSize) {
     this.id = id;
     /**
-     * @type {_BucketData[]}
+     * @type {BucketData[]}
      */
     this.data = [];
     this.maxSize = maxSize;
@@ -15,30 +15,57 @@ class Bucket {
 
   /**
    * Adds data to the bucket
-   * @param {_BucketData} data data to be added to the bucket
+   * @param {BucketData} data data to be added to the bucket
    */
   addData(data) {
-    if (this.data < this.maxSize) {
+    if (this.data.length < this.maxSize) {
       this.data.push(data);
       return;
     }
-    if (this.bucketOverflow = null)
+    if (this.bucketOverflow == null)
       this.bucketOverflow = new Bucket(this.id, this.maxSize);
       
-    this.bucketOverflow.data.push(data);
+    this.bucketOverflow.addData(data);
+  }
+
+  /**
+   * @returns {number}
+   */
+  getTotalSize() {
+    let size = 0;
+
+    size += this.data.length;
+    if (this.bucketOverflow !== null) {
+      size += this.bucketOverflow.getTotalSize();
+    }
+
+    return size;
+  }
+
+  /**
+   * @returns {number} 
+   */
+  getOverflowSize() {
+    let size = 0;
+    
+    if (this.bucketOverflow !== null) {
+      size += this.bucketOverflow.getTotalSize();
+    }
+
+    return size;
   }
 }
 
 /**
  * Type definition for the data that `Bucket` stores. 
  */
-class _BucketData {
+class BucketData {
   /**
-   * @param {Number} value data index value
+   * @param {number} key data key value
    * @param {Page} page pointer to the database Page that holds the data Tuple
    */
-  constructor(value, page) {
-    this.key = value;
+  constructor(key, page) {
+    this.key = key;
     this.page = page;
   }
 }
