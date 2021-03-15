@@ -35,6 +35,26 @@ class Table {
     }
   }
 
+  getTotalOverflows() {
+    let overflows = 0;
+
+    this.buckets.forEach(bucket => {
+      overflows += bucket.getOverflows();
+    });
+    
+    return overflows;
+  }
+
+  getTotalCollisions() {
+    let collisions = 0;
+
+    this.buckets.forEach(bucket => {
+      collisions += bucket.getCollisions();
+    });
+
+    return collisions;
+  }
+
   /**
    * @param {Tuple} tuple
    */

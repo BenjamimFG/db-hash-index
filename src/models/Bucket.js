@@ -54,6 +54,29 @@ class Bucket {
 
     return size;
   }
+
+  getOverflows() {
+    let overflows = 0;
+
+    if (this.bucketOverflow !== null) {
+      overflows++;
+      overflows += this.bucketOverflow.getOverflows();
+    }
+
+    return overflows;
+  }
+
+  getCollisions() {
+    let collisions = 0;
+
+    if (this.data.length > 1) {
+      collisions += this.data.length - 1;
+      if (this.bucketOverflow)
+        collisions += this.bucketOverflow.getTotalSize();
+    }
+
+    return collisions;
+  }
 }
 
 /**

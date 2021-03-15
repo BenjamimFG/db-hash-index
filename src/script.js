@@ -44,6 +44,7 @@ function readFile(fileInput) {
 
 function debugLogState() {
   console.log("total tuples: " + table.tuples.length, "\npage size: " + table.pageSize, "\ntotal pages: " + table.totalPages, "\nbucket size: " + table.bucketSize, "\ntotal buckets: " + table.totalBuckets);
+  console.log('overflows: ' + table.getTotalOverflows() + '\ncollisions: ' + table.getTotalCollisions());
 }
 
 function logPages() {
