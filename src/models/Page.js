@@ -23,4 +23,16 @@ class Page {
     }
   }
 
+  /**
+   * 
+   * @param {string} key 
+   * @returns {number}
+   */
+  getTupleIndexByKey(key) {
+    for (const [idx, tuple] of this.tuples.entries()) {
+      if (tuple.key === key)
+        return idx;
+    }
+  }
+
 }

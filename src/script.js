@@ -30,7 +30,7 @@ function readFile(fileInput) {
 
     words.forEach(word => {
       word = word.trim();
-      // const hash = hashingFunction(word);
+
       const currentTuple = new Tuple(word, word);
       
       table.addTuple(currentTuple);
@@ -40,6 +40,26 @@ function readFile(fileInput) {
     logPages();
     logBuckets();
   });
+}
+
+function searchByKey() {
+  if (!table) {
+    alert('Please generate a table from a file first') 
+    return;
+  }
+
+  const key = document.querySelector('#search-key').value;
+
+  try {
+    const page = table.getPageByKey(key);
+    const index = page.getTupleIndexByKey(key);
+  
+    console.log(`key at page ${page.id} at index ${index}`);
+    console.log(`disk accesses: ${index + 1}`)
+  } catch(err) {
+    alert(`Key '${key}' not found`);
+    console.error(err);
+  }
 }
 
 function debugLogState() {

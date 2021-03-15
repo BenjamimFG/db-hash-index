@@ -9,18 +9,23 @@
   <script src="./src/models/Page.js"></script>
   <script src="./src/models/Bucket.js"></script>
   <link rel="stylesheet" href="./src/styles/styles.css">
+  <link rel="stylesheet" href="./src/styles/purePopup.css">
 </head>
 <body>
   <input type="file" onchange="readFile(this)">
   <label for="page-size">Page size:</label>
   <input type="number" id="page-size" value="4000">
-  <label for="page-size">Number of Pages:</label>
+  <label for="total-pages">Number of Pages:</label>
   <input type="number" id="total-pages">
-  <label for="page-size">Bucket Size:</label>
+  <label for="bucket-size">Bucket Size:</label>
   <input type="number" id="bucket-size" value="255">
-  <label for="page-size">Number of Buckets:</label>
+  <label for="total-buckets">Number of Buckets:</label>
   <input type="number" id="total-buckets">
+  <label for="search-key">Key to search:</label>
+  <input type="text" id="search-key">
+  <button onclick="searchByKey()">Search</button>
 
+  <script src="./src/lib/purePopup.js"></script>
   <script src="./src/script.js"></script>
 </body>
 </html>

@@ -35,6 +35,22 @@ class Table {
     }
   }
 
+  /**
+   * @param {string} key key to be searched in the table
+   * @returns {Page} the page where the tuple with key `key` is located
+   */
+  getPageByKey(key) {
+    for (const bucket of this.buckets) {
+      for (const entry of bucket.data) {
+        if (entry.key === key) {
+          return entry.page;
+        }
+      }
+    }
+
+    throw new Error(`key '${key}' not found`);
+  }
+
   getTotalOverflows() {
     let overflows = 0;
 
